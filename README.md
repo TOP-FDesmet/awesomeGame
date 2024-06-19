@@ -2,4 +2,4 @@
 game prototype with monogame - test features
 
 ## Visuels
-https://github.com/TOP-FDesmet/theDarkSeries.git
+https://penusbmic.itch.io/the-dark-series-the-swordmaster-hero
