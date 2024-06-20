@@ -11,6 +11,8 @@ public class Game1 : Game
 
     Rectangle smallRectangle;
     Rectangle ground;
+
+    bool gravityOn = false;
     
     private GraphicsDeviceManager _graphics;
     private SpriteBatch _spriteBatch;
@@ -61,7 +63,15 @@ public class Game1 : Game
         if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
             Exit();
 
-        // TODO: Add your update logic here
+        if (gravityOn) {
+            smallRectangle.Y += 2;
+        }
+
+        if (smallRectangle.Intersects(ground)) {
+            gravityOn = false;
+        } else {
+            gravityOn =true;
+        }
 
         base.Update(gameTime);
     }
