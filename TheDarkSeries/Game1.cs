@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Linq.Expressions;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
@@ -6,6 +7,13 @@ namespace TheDarkSeries;
 
 public class Game1 : Game
 {
+    Texture2D pixel;
+
+    Rectangle smallRectangle;
+    Rectangle ground;
+
+    bool gravityOn = false;
+    
     private GraphicsDeviceManager _graphics;
     private SpriteBatch _spriteBatch;
 
@@ -27,7 +35,27 @@ public class Game1 : Game
     {
         _spriteBatch = new SpriteBatch(GraphicsDevice);
 
-        // TODO: use this.Content to load your game content here
+        pixel = new Texture2D(GraphicsDevice, 1, 1);
+        pixel.SetData<Color>(new Color [] { Color.White });
+
+        int smallRectangleWidth = 32;
+        int smallRectangleHeight = 32;
+        int groundWidth = _graphics.PreferredBackBufferWidth;
+        int groundHeight = 50;
+
+        smallRectangle = new Rectangle(
+            _graphics.PreferredBackBufferWidth / 2 - smallRectangleWidth / 2, 
+            0, 
+            smallRectangleWidth, 
+            smallRectangleHeight
+        );
+
+        ground = new Rectangle(
+            0,
+            _graphics.PreferredBackBufferHeight - groundHeight,
+            groundWidth,
+            groundHeight
+        );
     }
 
     protected override void Update(GameTime gameTime)
@@ -35,7 +63,15 @@ public class Game1 : Game
         if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
             Exit();
 
-        // TODO: Add your update logic here
+        if (gravityOn) {
+            smallRectangle.Y += 2;
+        }
+
+        if (smallRectangle.Intersects(ground)) {
+            gravityOn = false;
+        } else {
+            gravityOn =true;
+        }
 
         base.Update(gameTime);
     }
@@ -44,7 +80,12 @@ public class Game1 : Game
     {
         GraphicsDevice.Clear(Color.CornflowerBlue);
 
-        // TODO: Add your drawing code here
+        _spriteBatch.Begin();
+
+        _spriteBatch.Draw(pixel, smallRectangle, Color.BlueViolet);
+        _spriteBatch.Draw(pixel, ground, Color.Beige);
+        
+        _spriteBatch.End();
 
         base.Draw(gameTime);
     }
